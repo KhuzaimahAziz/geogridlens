@@ -4,7 +4,7 @@
 A Polisense AI entry for the GENCO challenge, by Khuzaima Aziz (Co-Founder, Spatial Data Scientist, Polisense AI).
 
 <p>
-  <a href="https://YOUR-APP.streamlit.app"><img alt="Open the dashboard" src="https://img.shields.io/badge/Open%20the%20dashboard-Streamlit-0f5d8f?style=for-the-badge"></a>
+  <a href="https://geogridlens-dzwc767mkv3sm7bezcrya3.streamlit.app"><img alt="Open the dashboard" src="https://img.shields.io/badge/Open%20the%20dashboard-Streamlit-0f5d8f?style=for-the-badge"></a>
   <a href="https://khuzaimahaziz.github.io/geogridlens/"><img alt="Read the walkthrough" src="https://img.shields.io/badge/Read%20the%20walkthrough-GitHub%20Pages-d98c1f?style=for-the-badge"></a>
   <a href="CASE_STUDY_REPORT.md"><img alt="Case-study report" src="https://img.shields.io/badge/Case--study%20report-Markdown-555?style=for-the-badge"></a>
 </p>
@@ -158,8 +158,7 @@ result tables the dashboard needs (`outputs/case_study/**/*.parquet`,
 only the dashboard dependencies, so no GENCO, PyTorch or dataset download is
 needed to host it. On https://share.streamlit.io choose "New app", pick this
 repository and branch `main`, set the main file to `app/case_study_dashboard.py`,
-deploy, then replace `https://YOUR-APP.streamlit.app` in the badge above with
-the URL you get. The app reads the consolidated Parquet files when the
+and deploy. The live instance is at https://geogridlens-dzwc767mkv3sm7bezcrya3.streamlit.app. The app reads the consolidated Parquet files when the
 per-scenario folders of a full run are absent.
 
 **Walkthrough (GitHub Pages).**

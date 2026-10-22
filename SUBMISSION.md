@@ -127,7 +127,7 @@ grid will reject, and which outages or fire-exposed lines put a site at risk.
 ## Links
 
 - Code: https://github.com/KhuzaimahAziz/geogridlens
-- Live dashboard: https://YOUR-APP.streamlit.app (read-only, hosted from the shipped result tables)
+- Live dashboard: https://geogridlens-dzwc767mkv3sm7bezcrya3.streamlit.app (read-only, hosted from the shipped result tables)
 - Walkthrough page: https://khuzaimahaziz.github.io/geogridlens/
 - Case-study report with all numbers regenerated from outputs: `CASE_STUDY_REPORT.md`
 - Data: all inputs are public (PFDelta Task 1.3 `gridfm/pfdelta_task1.3`, checkpoint
@@ -189,5 +189,5 @@ solver bookkeeping (parallel circuits, pandapower branch order), now regression-
 Everything is real except the grid: the IEEE-118 benchmark is laid out inside
 the study box, so grid geometry and power-flow numbers are illustrative.
 
-Code, data pointers and reproduction: [repository URL]. Dashboard: [app URL].
-Walkthrough: [Pages URL]. Contact: khuzaimaaziz89@gmail.com. Team: Polisense AI (Khuzaima Aziz, Co-Founder, Spatial Data Scientist, Polisense AI).
+Code, data pointers and reproduction: https://github.com/KhuzaimahAziz/geogridlens. Dashboard: https://geogridlens-dzwc767mkv3sm7bezcrya3.streamlit.app.
+Walkthrough: https://khuzaimahaziz.github.io/geogridlens/. Contact: khuzaimaaziz89@gmail.com. Team: Polisense AI (Khuzaima Aziz, Co-Founder, Spatial Data Scientist, Polisense AI).

@@ -126,9 +126,9 @@ grid will reject, and which outages or fire-exposed lines put a site at risk.
 
 ## Links
 
-- Code: https://github.com/YOUR-GITHUB-USER/YOUR-REPO
+- Code: https://github.com/KhuzaimahAziz/geogridlens
 - Live dashboard: https://YOUR-APP.streamlit.app (read-only, hosted from the shipped result tables)
-- Walkthrough page: https://YOUR-GITHUB-USER.github.io/YOUR-REPO/
+- Walkthrough page: https://khuzaimahaziz.github.io/geogridlens/
 - Case-study report with all numbers regenerated from outputs: `CASE_STUDY_REPORT.md`
 - Data: all inputs are public (PFDelta Task 1.3 `gridfm/pfdelta_task1.3`, checkpoint
   `gridfm/genco-pfdelta`, Copernicus DEM and MODIS via Planetary Computer, ESA

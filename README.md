@@ -5,7 +5,7 @@ A Polisense AI entry for the GENCO challenge, by Khuzaima Aziz (Co-Founder, Spat
 
 <p>
   <a href="https://YOUR-APP.streamlit.app"><img alt="Open the dashboard" src="https://img.shields.io/badge/Open%20the%20dashboard-Streamlit-0f5d8f?style=for-the-badge"></a>
-  <a href="https://YOUR-GITHUB-USER.github.io/YOUR-REPO/"><img alt="Read the walkthrough" src="https://img.shields.io/badge/Read%20the%20walkthrough-GitHub%20Pages-d98c1f?style=for-the-badge"></a>
+  <a href="https://khuzaimahaziz.github.io/geogridlens/"><img alt="Read the walkthrough" src="https://img.shields.io/badge/Read%20the%20walkthrough-GitHub%20Pages-d98c1f?style=for-the-badge"></a>
   <a href="CASE_STUDY_REPORT.md"><img alt="Case-study report" src="https://img.shields.io/badge/Case--study%20report-Markdown-555?style=for-the-badge"></a>
 </p>
 

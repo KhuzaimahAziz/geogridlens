@@ -1,0 +1,9 @@
+# A feasible released PFDelta operating snapshot used as the common baseline
+# for GENCO inference and pandapower validation.  The snapshot is part of the
+# downloaded Task 1.3 test split; it is not a real operating grid.
+snapshot:
+  relative_directory: test/case118/n/feasible/raw
+  scenario_id: 14558
+outputs:
+  genco_directory: outputs/genco_results/native_pfdelta
+  ac_directory: outputs/ac_validation/native_pfdelta

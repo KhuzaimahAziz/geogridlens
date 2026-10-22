@@ -1,0 +1,111 @@
+# GeoGridLens Alentejo case study.
+#
+# Geographic layers (terrain, land cover, protected areas, burned areas, solar
+# resource, settlements) are REAL open data for the study area below.  The
+# electrical network is the IEEE-118 benchmark drawn over that geography with a
+# deterministic layout, so grid results are illustrative and must not be read
+# as statements about Portugal's transmission system.
+case_study:
+  id: alentejo_ieee118_geoembedded
+  geographic_context: Alentejo, Portugal (Evora - Beja - Alqueva)
+  geometry_is_schematic: true          # network geometry only
+  geodata_is_real: true                # terrain / land / hazard layers
+  not_for_operational_or_geographic_use: true
+  asset:
+    type: solar_with_optional_battery
+    battery_power_mw: 50
+
+study_area:
+  # ~100 km x 100 km box covering Evora, Beja, Alqueva reservoir and the Guadiana.
+  west: -8.45
+  south: 37.80
+  east: -7.30
+  north: 38.70
+  metric_crs: EPSG:32629               # WGS 84 / UTM 29N
+  resolution_m: 100
+  burned_area_years: {start: 2015, end: 2024}
+
+network_embedding:
+  layout: kamada_kawai                 # deterministic force layout of the benchmark topology
+  rank_blend: 0.5                      # 0 = raw layout, 1 = rank-spread; spreads the grid over the box
+  margin_km: 6                         # keep buses inside the box
+  avoid_water: true                    # nudge buses off reservoirs / rivers
+
+# Hexagonal candidate cells and the documented candidate-selection rule.
+candidate_sites:
+  hex_circumradius_m: 1000             # ~2.6 km2 cells, enough for 100 MW PV
+  count: 30
+  connection_radius_m: 10000           # candidate must be within 10 km of a bus
+  pool_score_quantile: 0.60            # pool = non-excluded cells above this spatial-score quantile
+  distinct_buses: true                 # one candidate per connection bus
+  spatial_weights: {resource: 0.40, land: 0.35, slope: 0.25, exclusion_penalty: 0.50}
+  slope_full_score_deg: 3.0
+  slope_zero_score_deg: 15.0
+  land_cover_suitability:              # ESA WorldCover classes -> 0..1
+    10: 0.15   # tree cover
+    20: 0.80   # shrubland
+    30: 1.00   # grassland
+    40: 0.70   # cropland
+    50: 0.00   # built-up
+    60: 0.90   # bare / sparse vegetation
+    70: 0.00   # snow / ice
+    80: 0.00   # permanent water
+    90: 0.00   # herbaceous wetland
+    95: 0.00   # mangroves
+    100: 0.50  # moss / lichen
+  exclusion_rules:
+    protected_fraction_gt: 0.25
+    water_fraction_gt: 0.10
+    built_fraction_gt: 0.20
+    settlement_buffer_m: {city: 2000, town: 1000, village: 500}
+  wildfire:
+    corridor_buffer_m: 1000
+    fuel_classes: [10, 20]             # tree cover and shrubland as fuel load
+    exposure_weights: {burned: 0.6, fuel: 0.4}
+
+capacities_mw: [50, 100, 200]
+operating_conditions:
+  - id: low_demand
+    load_multiplier: 0.80
+    solar_capacity_factor: 0.60
+  - id: normal_demand
+    load_multiplier: 1.00
+    solar_capacity_factor: 0.80
+  - id: peak_demand
+    load_multiplier: 1.10
+    solar_capacity_factor: 0.90
+  - id: high_renewable
+    load_multiplier: 0.90
+    solar_capacity_factor: 1.00
+
+# N-0 plus five N-1 outages.  The five outages are the most wildfire-exposed
+# in-service lines (corridor exposure from the real burned-area and fuel layers)
+# whose removal keeps the network connected.  They are resolved when the
+# spatial layers are built and recorded in the manifest.
+contingencies:
+  n0: {kind: none}
+  n1_selection:
+    kind: wildfire_exposure_top_k
+    k: 5
+    exclude_transformers: true
+
+weight_profiles:
+  grid_first: {grid: 0.70, resilience: 0.20, spatial: 0.10}
+  balanced: {grid: 0.55, resilience: 0.25, spatial: 0.20}
+  resilience_first: {grid: 0.40, resilience: 0.40, spatial: 0.20}
+
+resilience_weights: {contingency: 0.70, wildfire_corridor: 0.30}
+
+screening_thresholds:
+  max_voltage_delta_pu: 0.05
+  max_loading_delta: 0.20
+  warning_voltage_delta_pu: 0.03
+  warning_loading_delta: 0.10
+
+outputs:
+  root: outputs/case_study
+  scenario_manifest: outputs/case_study/scenario_manifest.csv
+  genco_directory: outputs/case_study/genco_results
+  indicators_directory: outputs/case_study/indicators
+  spatial_directory: data/spatial/case_study
+  raw_geodata_directory: data/raw/alentejo

@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use GeoGridLens, please cite it as below."
+title: "GeoGridLens: grid-aware solar siting with GENCO neural power flow over real Alentejo geodata"
+type: software
+authors:
+  - family-names: Aziz
+    given-names: Khuzaima
+    affiliation: "Polisense AI"
+    email: khuzaimaaziz89@gmail.com
+date-released: 2026-10-23
+license: MIT
+repository-code: "https://github.com/YOUR-GITHUB-USER/YOUR-REPO"
+keywords:
+  - GENCO
+  - GridFM
+  - power flow
+  - renewable siting
+  - geospatial

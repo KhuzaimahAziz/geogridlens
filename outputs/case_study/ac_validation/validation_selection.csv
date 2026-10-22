@@ -1,0 +1,74 @@
+scenario_id,baseline_id,candidate_id,linked_bus_id,capacity_mw,active_power_mw,operating_condition,load_multiplier,solar_capacity_factor,contingency_id,contingency_kind,pfdelta_branch_index,outage_branch_id,change,is_baseline,validation_reason
+base__high_renewable,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,base,none,,,none,True,Operating-condition baseline
+base__high_renewable__n1_072,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,n1_072,branch_outage,72.0,line:68,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__high_renewable__n1_110,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,n1_110,branch_outage,110.0,line:101,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__high_renewable__n1_162,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,n1_162,branch_outage,162.0,line:150,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__high_renewable__n1_163,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,n1_163,branch_outage,163.0,line:151,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__high_renewable__n1_164,base__high_renewable,,,0.0,0.0,high_renewable,0.9,1.0,n1_164,branch_outage,164.0,line:152,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__low_demand,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,base,none,,,none,True,Operating-condition baseline
+base__low_demand__n1_072,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,n1_072,branch_outage,72.0,line:68,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__low_demand__n1_110,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,n1_110,branch_outage,110.0,line:101,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__low_demand__n1_162,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,n1_162,branch_outage,162.0,line:150,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__low_demand__n1_163,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,n1_163,branch_outage,163.0,line:151,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__low_demand__n1_164,base__low_demand,,,0.0,0.0,low_demand,0.8,0.6,n1_164,branch_outage,164.0,line:152,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__normal_demand,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,base,none,,,none,True,Operating-condition baseline
+base__normal_demand__n1_072,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,n1_072,branch_outage,72.0,line:68,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__normal_demand__n1_110,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,n1_110,branch_outage,110.0,line:101,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__normal_demand__n1_162,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,n1_162,branch_outage,162.0,line:150,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__normal_demand__n1_163,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,n1_163,branch_outage,163.0,line:151,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__normal_demand__n1_164,base__normal_demand,,,0.0,0.0,normal_demand,1.0,0.8,n1_164,branch_outage,164.0,line:152,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__peak_demand,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,base,none,,,none,True,Operating-condition baseline
+base__peak_demand__n1_072,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,n1_072,branch_outage,72.0,line:68,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__peak_demand__n1_110,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,n1_110,branch_outage,110.0,line:101,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__peak_demand__n1_162,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,n1_162,branch_outage,162.0,line:150,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__peak_demand__n1_163,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,n1_163,branch_outage,163.0,line:151,branch_outage,True,"Outage-only baseline (N-1, no project)"
+base__peak_demand__n1_164,base__peak_demand,,,0.0,0.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,branch_outage,True,"Outage-only baseline (N-1, no project)"
+A-01__100mw__high_renewable__n0,base__high_renewable,A-01,6.0,100.0,100.0,high_renewable,0.9,1.0,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-02__50mw__peak_demand__n1_164,base__peak_demand,A-02,11.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-04__50mw__low_demand__n0,base__low_demand,A-04,20.0,50.0,30.0,low_demand,0.8,0.6,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-05__100mw__normal_demand__n0,base__normal_demand,A-05,24.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Lowest-ranked candidate, normal N-0"
+A-05__100mw__peak_demand__n1_164,base__peak_demand,A-05,24.0,100.0,90.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-06__50mw__peak_demand__n1_164,base__peak_demand,A-06,31.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-07__100mw__normal_demand__n0,base__normal_demand,A-07,34.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-07__50mw__peak_demand__n1_164,base__peak_demand,A-07,34.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-08__100mw__normal_demand__n0,base__normal_demand,A-08,37.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-08__200mw__normal_demand__n0,base__normal_demand,A-08,37.0,200.0,160.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-08__50mw__peak_demand__n1_164,base__peak_demand,A-08,37.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-09__100mw__normal_demand__n0,base__normal_demand,A-09,41.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-10__100mw__normal_demand__n0,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-10__100mw__normal_demand__n1_072,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n1_072,branch_outage,72.0,line:68,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-10__100mw__normal_demand__n1_110,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n1_110,branch_outage,110.0,line:101,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-10__100mw__normal_demand__n1_162,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n1_162,branch_outage,162.0,line:150,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-10__100mw__normal_demand__n1_163,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n1_163,branch_outage,163.0,line:151,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-10__100mw__normal_demand__n1_164,base__normal_demand,A-10,49.0,100.0,80.0,normal_demand,1.0,0.8,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-10__50mw__peak_demand__n1_164,base__peak_demand,A-10,49.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-11__100mw__normal_demand__n0,base__normal_demand,A-11,52.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Lowest-ranked candidate, normal N-0"
+A-12__100mw__peak_demand__n0,base__peak_demand,A-12,73.0,100.0,90.0,peak_demand,1.1,0.9,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-13__100mw__normal_demand__n0,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-13__100mw__normal_demand__n1_072,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n1_072,branch_outage,72.0,line:68,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-13__100mw__normal_demand__n1_110,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n1_110,branch_outage,110.0,line:101,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-13__100mw__normal_demand__n1_162,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n1_162,branch_outage,162.0,line:150,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-13__100mw__normal_demand__n1_163,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n1_163,branch_outage,163.0,line:151,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-13__100mw__normal_demand__n1_164,base__normal_demand,A-13,77.0,100.0,80.0,normal_demand,1.0,0.8,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-14__100mw__normal_demand__n0,base__normal_demand,A-14,78.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-16__100mw__high_renewable__n0,base__high_renewable,A-16,86.0,100.0,100.0,high_renewable,0.9,1.0,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-17__200mw__high_renewable__n0,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n0,none,,,generation_injection,False,Largest predicted loading-change diagnostic
+A-17__200mw__high_renewable__n1_072,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n1_072,branch_outage,72.0,line:68,generation_injection_with_branch_outage,False,Largest predicted loading-change diagnostic
+A-17__200mw__high_renewable__n1_110,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n1_110,branch_outage,110.0,line:101,generation_injection_with_branch_outage,False,Largest predicted loading-change diagnostic
+A-17__200mw__high_renewable__n1_162,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n1_162,branch_outage,162.0,line:150,generation_injection_with_branch_outage,False,Largest predicted loading-change diagnostic
+A-17__200mw__high_renewable__n1_163,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n1_163,branch_outage,163.0,line:151,generation_injection_with_branch_outage,False,Largest predicted loading-change diagnostic
+A-17__200mw__high_renewable__n1_164,base__high_renewable,A-17,87.0,200.0,200.0,high_renewable,0.9,1.0,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Largest predicted loading-change diagnostic
+A-19__100mw__normal_demand__n0,base__normal_demand,A-19,90.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-19__50mw__low_demand__n0,base__low_demand,A-19,90.0,50.0,30.0,low_demand,0.8,0.6,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-20__100mw__normal_demand__n0,base__normal_demand,A-20,92.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-22__100mw__normal_demand__n0,base__normal_demand,A-22,107.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-23__200mw__normal_demand__n0,base__normal_demand,A-23,109.0,200.0,160.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-26__50mw__peak_demand__n1_164,base__peak_demand,A-26,114.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-27__100mw__peak_demand__n0,base__peak_demand,A-27,115.0,100.0,90.0,peak_demand,1.1,0.9,n0,none,,,generation_injection,False,Deterministic N-0 holdout
+A-27__50mw__peak_demand__n1_164,base__peak_demand,A-27,115.0,50.0,45.0,peak_demand,1.1,0.9,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,Highest predicted absolute loading diagnostic
+A-28__100mw__normal_demand__n0,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n0,none,,,generation_injection,False,"Top-ranked candidate, normal N-0"
+A-28__100mw__normal_demand__n1_072,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n1_072,branch_outage,72.0,line:68,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-28__100mw__normal_demand__n1_110,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n1_110,branch_outage,110.0,line:101,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-28__100mw__normal_demand__n1_162,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n1_162,branch_outage,162.0,line:150,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-28__100mw__normal_demand__n1_163,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n1_163,branch_outage,163.0,line:151,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"
+A-28__100mw__normal_demand__n1_164,base__normal_demand,A-28,116.0,100.0,80.0,normal_demand,1.0,0.8,n1_164,branch_outage,164.0,line:152,generation_injection_with_branch_outage,False,"Top-ranked candidate, N-1 coverage"

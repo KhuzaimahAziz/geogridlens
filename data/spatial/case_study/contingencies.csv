@@ -1,0 +1,7 @@
+contingency_id,kind,branch_id,pfdelta_branch_index,from_bus,to_bus,wildfire_exposure_score,selection_reason
+n0,none,,,,,,intact network
+n1_110,branch_outage,line:101,110,24,72,0.25262390670553936,rank 1 corridor wildfire exposure among connectivity-preserving lines
+n1_164,branch_outage,line:152,164,103,104,0.2518397383483238,rank 2 corridor wildfire exposure among connectivity-preserving lines
+n1_163,branch_outage,line:151,163,100,104,0.2284351145038168,rank 3 corridor wildfire exposure among connectivity-preserving lines
+n1_072,branch_outage,line:68,72,52,53,0.21345565749235473,rank 4 corridor wildfire exposure among connectivity-preserving lines
+n1_162,branch_outage,line:150,162,100,103,0.20986301369863014,rank 5 corridor wildfire exposure among connectivity-preserving lines

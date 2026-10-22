@@ -1,0 +1,20 @@
+# Acceptance criteria for the pandapower AC check of GENCO scenarios.
+# Absolute and delta criteria are evaluated and reported separately.
+reference_solver: pandapower
+statuses:
+  - AC verified
+  - GENCO screened
+  - Needs verification
+  - Infeasible
+acceptance_criteria:
+  voltage_mae_pu: 0.01
+  voltage_max_abs_error_pu: 0.05
+  branch_active_power_mae_mw: 10.0
+  branch_active_power_max_abs_error_mw: 30.0
+  overloaded_branch_agreement: 0.95
+  voltage_violation_agreement: 0.95
+delta_acceptance_criteria:
+  voltage_delta_mae_pu: 0.002
+  voltage_delta_max_abs_error_pu: 0.035
+  branch_active_power_delta_mae_mw: 10.0
+  branch_active_power_delta_max_abs_error_mw: 120.0

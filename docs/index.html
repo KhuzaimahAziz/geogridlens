@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeoGridLens Approach</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (~68ch) with full-width bands for the pipeline and the maps table. */
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --fg:#1a2130; --muted:#5b6473; --line:#d9dee7;
+  --accent:#0f5d8f; --accent-soft:#e3eef7; --solar:#d98c1f; --solar-soft:#fbefd9;
+  --ok:#2e7d4f; --warn:#b4541a; --real:#2e7d4f; --schem:#7a4fb0;
+  --display:"Sora",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141b; --surface:#171e28; --fg:#e7ebf1; --muted:#a3adbb; --line:#2a3340;
+  --accent:#6fb3e0; --accent-soft:#17304a; --solar:#f0b45a; --solar-soft:#3a2c14;
+  --ok:#6fc79a; --warn:#f0a06a; --real:#6fc79a; --schem:#bda3e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#171e28; --fg:#e7ebf1; --muted:#a3adbb; --line:#2a3340;
+  --accent:#6fb3e0; --accent-soft:#17304a; --solar:#f0b45a; --solar-soft:#3a2c14;
+  --ok:#6fc79a; --warn:#f0a06a; --real:#6fc79a; --schem:#bda3e6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+main{max-width:1040px;margin:0 auto}
+.col{max-width:68ch}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,46px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3vw,30px);font-weight:600;margin-top:64px;margin-bottom:12px;padding-top:24px;border-top:1px solid var(--line)}
+h3{font-size:19px;font-weight:600;margin-top:28px;margin-bottom:6px}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{padding-block:56px 24px}
+.lede{font-size:20px;color:var(--muted);max-width:60ch;margin-top:14px}
+.question{margin-top:28px;padding:20px 24px;border-left:4px solid var(--solar);background:var(--solar-soft);font-family:var(--display);font-size:20px;font-weight:500;max-width:72ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:28px}
+.kpi{background:var(--surface);border:1px solid var(--line);padding:14px 16px}
+.kpi b{display:block;font-family:var(--display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 18px;font-size:14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid currentColor;vertical-align:middle}
+.tag.real{color:var(--real)} .tag.schem{color:var(--schem)}
+.callout{background:var(--accent-soft);border:1px solid var(--line);padding:16px 20px;margin:18px 0}
+.callout.warn{border-left:4px solid var(--warn)}
+.steps{counter-reset:s;display:grid;gap:12px;margin:18px 0;padding:0;list-style:none}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);padding:14px 16px}
+.steps li::before{counter-increment:s;content:counter(s);font-family:var(--display);font-weight:600;font-size:22px;color:var(--accent);line-height:1.1}
+.steps li>div{min-width:0}
+.steps b{display:block;font-weight:600}
+.steps small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.steps code,p code,td code,li code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+.formula{font-family:var(--mono);font-size:15px;background:var(--surface);border:1px solid var(--line);padding:12px 16px;overflow-x:auto;margin:10px 0 16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:18px 0}
+.card{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.card h3{margin-top:0}
+.tablewrap{overflow-x:auto;margin:14px 0 20px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:14px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.ok{background:var(--accent-soft);color:var(--ok)} .pill.mid{background:var(--solar-soft);color:var(--warn)}
+.matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:stretch;margin:14px 0}
+.matrix div{background:var(--surface);border:1px solid var(--line);padding:12px;text-align:center}
+.matrix b{display:block;font-family:var(--display);font-size:26px;color:var(--accent)}
+.matrix small{color:var(--muted);font-size:13px}
+.matrix .eq{background:none;border:none;font-family:var(--display);font-size:26px;color:var(--muted);align-self:center}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);padding:12px;overflow-x:auto;margin:16px 0}
+pre.cmd{font-family:var(--mono);font-size:14px;background:var(--surface);border:1px solid var(--line);padding:14px 16px;overflow-x:auto}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 18px;margin:12px 0}
+dt{font-weight:600} dd{margin:0;color:var(--muted)}
+@media (max-width:560px){dl{grid-template-columns:1fr} dt{margin-top:6px} .steps li{grid-template-columns:32px 1fr}}
+figure{margin:0;min-width:0}
+figure img{width:100%;height:auto;border:1px solid var(--line);background:#fff}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+<script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs"; mermaid.initialize({startOnLoad:true, theme: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default"});</script>
+</head>
+<body>
+<main>
+<header>
+  <div class="eyebrow">GeoGridLens · end-to-end approach · Polisense AI</div>
+  <p style="margin:14px 0 0"><a href="https://YOUR-APP.streamlit.app" style="display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-family:var(--display);font-weight:600;padding:10px 18px;border-radius:6px;margin-right:10px">Open the live dashboard</a><a href="https://github.com/YOUR-GITHUB-USER/YOUR-REPO" style="display:inline-block;border:1px solid var(--accent);color:var(--accent);text-decoration:none;font-family:var(--display);font-weight:600;padding:9px 18px;border-radius:6px">Code and data on GitHub</a></p>
+  <h1>How we used GENCO and real geodata to screen where a solar plant can connect</h1>
+  <p class="lede">A plain-language walkthrough of the case study: what question it answers, what GENCO is and how it was used, where the real geographic data comes in, how the results were checked, and what the maps mean.</p>
+  <div class="question">Where in a 100 km × 100 km slice of Alentejo, Portugal, could a 100 MW solar plant connect to the grid with low electrical stress, on land that is actually buildable, robust to line outages, and away from wildfire-exposed corridors?</div>
+  <div class="kpis">
+    <div class="kpi"><b>3,886</b><span>hexagonal land cells scored from real geodata</span></div>
+    <div class="kpi"><b>30</b><span>candidate sites chosen by a documented rule</span></div>
+    <div class="kpi"><b>2,160</b><span>GENCO power-flow scenarios (+24 baselines)</span></div>
+    <div class="kpi"><b>44 ms</b><span>median GENCO time per scenario on a laptop CPU</span></div>
+    <div class="kpi"><b>73</b><span>scenarios re-solved with a conventional AC solver</span></div>
+  </div>
+  <figure style="margin-top:28px"><img src="figures/terrain_3d_candidates.png" alt="The top three candidate sites in 3D"><figcaption>The top three sites in 3D, about 22 km around each: the candidate cell, its connector and bus, the nearby IEEE-118 lines coloured by consequence class, protected land, burn scars and the real REN substations as context. Real 30 m terrain and land cover, path-traced with forge3d.</figcaption></figure>
+  <figure style="margin-top:20px"><img src="figures/terrain_3d_oblique.png" alt="The whole study area in 3D"><figcaption>The study area as the pipeline sees it: real Copernicus terrain and ESA WorldCover, Natura 2000 sites, MODIS burn scars, the schematic IEEE-118 lines coloured by wildfire-consequence class and the 30 candidates coloured by final score. Path-traced 3D render (forge3d) from Copernicus terrain at 30 m; white squares are the real REN transmission substations from OpenStreetMap, shown for context only.</figcaption></figure>
+  <figure style="margin-top:20px"><img src="figures/capacity_sweep.gif" alt="Animated capacity sweep at two sites"><figcaption>What GENCO sees as a plant grows from 0 to 200 MW at the strongest and the weakest site. Each frame is one 44 ms inference; line colour is the change in loading against the no-plant baseline.</figcaption></figure>
+</header>
+
+<section class="col">
+<h2>1. The problem in one paragraph</h2>
+<p>A solar developer picks sites by looking at land: sunshine, slope, protected areas, how far the nearest substation is. The grid side usually comes later, as a slow, expensive interconnection study on a handful of sites. By then the choice is mostly made. GeoGridLens flips that order. It screens the grid impact of <em>every</em> plausible site, under many operating conditions and line outages, early enough to shape the shortlist. That is only practical because GENCO can solve a power-flow case in tens of milliseconds instead of running a full numerical solver thousands of times.</p>
+<p>Everything on the land side is real open data. The grid itself is a standard benchmark network drawn over that landscape, because Portugal's real transmission model is not public. We keep the two clearly separated throughout.</p>
+<div class="legend"><span><i style="background:var(--real)"></i><b>Real</b>: terrain, land cover, protected areas, burned areas, solar yield, towns</span><span><i style="background:var(--schem)"></i><b>Schematic</b>: the IEEE-118 network's position on the map, candidate-to-bus links, all power-flow numbers</span></div>
+</section>
+
+<section class="col">
+<h2>Who this is for</h2>
+<div class="grid2">
+  <div class="card"><h3>Solar developers</h3><p>You already screen land for sun, slope and permits. This adds the question the grid will ask later, for every site at once: will this connection be comfortable at 50, 100 or 200 MW, in a quiet week and in a peak week, and if a nearby line is out? Sites that look equal on land can differ by a factor of two on the grid.</p></div>
+  <div class="card"><h3>Environmental and regional planners</h3><p>You decide which land is off the table. Here the exclusions come first, from real protected-area, water and settlement data, and the grid screen runs only on what is left. The wildfire map adds a second environmental lens: which corridors through fire-prone land the grid would miss most if they burned.</p></div>
+</div>
+<p>GENCO is the piece that makes this affordable. A conventional solver run per site, condition and outage is a study budget; a neural power-flow run is a few milliseconds, so the whole matrix fits in a coffee break and can be re-run whenever a layer, a weight or a site list changes.</p>
+</section>
+
+<section class="col">
+<h2>2. What GENCO is, in plain terms</h2>
+<p>A <strong>power flow</strong> is the basic calculation grid engineers run: given how much power every load consumes and every generator produces, and how the lines are connected, what voltage does each bus (substation node) sit at and how much power flows down each line? Classical solvers (Newton-Raphson, as in pandapower or MATPOWER) iterate to an exact answer. They are accurate but each run costs real time, and some cases simply fail to converge.</p>
+<p><strong>GENCO</strong> is a neural network from the GridFM project (IBM Research and partners) that has learned to answer the same question directly. It is a graph neural network: buses are nodes, lines are edges, and it reads the same inputs a solver would (loads, generator setpoints, line impedances, which lines are in service) and predicts the voltages. From those voltages the line flows and loadings are reconstructed with the physics equations. The released model we used was trained on <em>PFDelta Task 1.3</em>, a public dataset of hundreds of thousands of solved IEEE-118 cases, including cases with lines removed.</p>
+<div class="grid2">
+  <div class="card"><h3>What goes in</h3><p>One operating snapshot of the 118-bus network: demand at each bus, generator outputs, line parameters, and a 0/1 flag per line for in or out of service.</p></div>
+  <div class="card"><h3>What comes out</h3><p>Voltage magnitude and angle at all 118 buses, from which we compute active and reactive flow on all 186 branches and the <em>loading ratio</em> (flow divided by the line's rating).</p></div>
+  <div class="card"><h3>Why it matters here</h3><p>One inference takes about 44 ms on a CPU, and the cost does not grow with how hard the case is. A matrix of 2,184 cases runs in a few minutes, reproducibly, every time the inputs change.</p></div>
+  <div class="card"><h3>What it is not</h3><p>It is not a replacement for a solver when you need a certified answer. We use it as a <em>screen</em> and verify a documented subset with the classical solver.</p></div>
+</div>
+</section>
+
+<section class="col">
+<h2>3. The case study setup</h2>
+<h3>Study area</h3>
+<p>A box from Évora in the north to south of Beja, including the Alqueva reservoir and the Guadiana valley (longitude −8.45 to −7.30, latitude 37.80 to 38.70). It is one of Europe's best solar regions, has large Natura 2000 sites, a big reservoir, and a real wildfire history, so every layer in the method has something to say.</p>
+<h3>The proposed asset</h3>
+<p>A solar plant with an optional 50 MW battery, screened at <strong>50, 100 and 200 MW</strong>. In the model it is a fixed power injection at the bus the site connects to, scaled by a capacity factor for each operating condition (for example 80 % output under normal demand, 100 % in the high-renewable condition).</p>
+<h3>Real data layers <span class="tag real">real</span></h3>
+<div class="tablewrap"><table>
+<tr><th>Layer</th><th>Source</th><th>What it decides</th></tr>
+<tr><td>Terrain and slope</td><td>Copernicus DEM, 30 m, via Microsoft Planetary Computer</td><td>Constructability score (flat is good)</td></tr>
+<tr><td>Land cover</td><td>ESA WorldCover 2021, 10 m</td><td>Land suitability (grassland best, forest and built-up poor, water excluded); fuel load for wildfire</td></tr>
+<tr><td>Protected areas</td><td>EEA Natura 2000 (2024) and national designations (CDDA)</td><td>Hard exclusion above 25 % overlap, penalty below</td></tr>
+<tr><td>Burned areas</td><td>NASA MODIS MCD64A1 monthly burned area, 2015 to 2024</td><td>Wildfire exposure of cells and line corridors</td></tr>
+<tr><td>Solar yield</td><td>JRC PVGIS 5.3, SARAH3 radiation</td><td>Resource score (kWh per kWp per year)</td></tr>
+<tr><td>Settlements and substations</td><td>OpenStreetMap</td><td>Buffers around towns; real substations shown for context only</td></tr>
+</table></div>
+<h3>The network <span class="tag schem">schematic</span></h3>
+<p>The IEEE-118 test system has 118 buses and 186 branches but no coordinates. We lay it out with a deterministic force-directed algorithm, stretch it across the study box, and nudge any bus that lands in water onto land. Every line keeps a stable identifier that ties it to the exact branch in the PFDelta data, so an outage on the map is the same outage in the model.</p>
+</section>
+
+<section>
+<h2>4. The pipeline, step by step</h2>
+<pre class="mermaid">
+flowchart LR
+  A[Real geodata<br/>DEM · WorldCover · Natura 2000<br/>MODIS burns · PVGIS · OSM] --> B[3,886 hex cells<br/>scored and excluded]
+  N[IEEE-118 topology] --> E[Geo-embedded<br/>buses and lines]
+  E --> W[Corridor wildfire<br/>exposure per line]
+  B --> C[30 candidate sites<br/>linked to nearest bus]
+  E --> C
+  W --> K[5 most exposed lines<br/>= N-1 outage set]
+  C --> M[Scenario manifest<br/>2,160 + 24 baselines]
+  K --> M
+  M --> G[GENCO inference<br/>released PFDelta checkpoint]
+  G --> S[Scores and maps 1 to 5]
+  G --> V[pandapower AC check<br/>73 scenarios]
+  V --> S
+  S --> D[Dashboard and report]
+</pre>
+<ol class="steps">
+  <li><div><b>Fetch and cache the real layers</b><small>Each source is downloaded once, clipped to the box, reprojected to a 100 m UTM grid and logged with URL, resolution, licence and access date.</small></div></li>
+  <li><div><b>Embed the benchmark network in the landscape</b><small>Kamada-Kawai layout of the 118-bus topology, spread over the box, buses moved off water. Positions are a drawing choice, not a claim.</small></div></li>
+  <li><div><b>Score every hexagonal cell</b><small>Per 2.6 km² cell: mean slope, land-cover mix, protected overlap, settlement buffer, burned fraction, fuel fraction, interpolated PV yield. Spatial score = 0.40 resource + 0.35 land + 0.25 slope − 0.50 protected fraction. Cells with too much protected land, water, built-up land or a town inside are excluded outright.</small></div></li>
+  <li><div><b>Choose 30 candidate sites by rule</b><small>Pool = non-excluded cells within 10 km of a bus and above the 60th percentile of spatial score. Pick 30 by farthest-point sampling, one per connection bus, each linked to its nearest bus.</small></div></li>
+  <li><div><b>Let the fire data choose the outages</b><small>For each line, exposure = 0.6 × burned fraction + 0.4 × tree/shrub fraction in a 1 km corridor. The five most exposed lines whose removal keeps the network connected become the N-1 cases.</small></div></li>
+  <li><div><b>Run GENCO over the whole matrix</b><small>Every scenario edits the same feasible PFDelta snapshot: scale all loads for the condition, subtract the plant's injection from demand at its bus, switch one line off if it is an N-1 case. 2,184 inferences in a few minutes.</small></div></li>
+  <li><div><b>Turn predictions into scores</b><small>Compare each scenario with its baseline, summarise per candidate and per line, and combine with the spatial scores under three weight profiles.</small></div></li>
+  <li><div><b>Check against a conventional solver</b><small>pandapower solves 73 of the same scenarios exactly. Agreement is reported for absolute values and for the changes separately, and non-converging cases are shown, not dropped.</small></div></li>
+</ol>
+</section>
+
+<section class="col">
+<h2>5. How GENCO was used, exactly</h2>
+<h3>The scenario matrix</h3>
+<div class="matrix">
+  <div><b>30</b><small>candidate sites</small></div><div class="eq">×</div>
+  <div><b>3</b><small>capacities<br>50 / 100 / 200 MW</small></div><div class="eq">×</div>
+  <div><b>4</b><small>operating conditions<br>low · normal · peak · high-renewable</small></div><div class="eq">×</div>
+  <div><b>6</b><small>grid states<br>intact + 5 single-line outages</small></div><div class="eq">=</div>
+  <div><b>2,160</b><small>GENCO scenarios</small></div>
+</div>
+<p>On top of these, 24 baselines: one per operating condition with no plant, and one per condition and outage with no plant. Baselines are what make the results interpretable.</p>
+<h3>Why we look at changes, not raw numbers</h3>
+<p>Two reasons. First, a change is what the decision is about: the question is what the project does to the grid, not what the grid looks like without it. Second, a change cancels whatever small offset either engine carries at the operating point. On the validated subset GENCO's loading changes track the AC solver with a slope of 0.95 and R² of 0.98 across 9,086 branch-scenario pairs, and 99 % of them are within 0.05 of AC. So every indicator is a difference:</p>
+<div class="formula">ΔV<sub>bus</sub> = V(scenario) − V(same-condition baseline)<br>Δloading<sub>line</sub> = loading(scenario) − loading(same-condition baseline)</div>
+<p>For outage cases we go one step further and subtract the outage-only baseline, so a candidate is charged for what <em>it</em> adds on top of the outage, not for the outage itself.</p>
+<h3>From deltas to a candidate's scores</h3>
+<dl>
+  <dt>Grid score</dt><dd>Over its 12 intact-network cases, how often and how badly a candidate pushes voltages (limit 0.05 pu) or line loadings (limit +0.20) beyond the screening thresholds. 1 = never, 0 = always.</dd>
+  <dt>Contingency risk</dt><dd>The same severity, but for the 60 outage cases, measured against the outage-only baseline.</dd>
+  <dt>Resilience score</dt><dd>1 − (0.7 × contingency risk + 0.3 × wildfire exposure of the site's own connection corridor, relative to the study area).</dd>
+  <dt>Spatial score</dt><dd>The land-side score from step 3.</dd>
+  <dt>Final score</dt><dd>Weighted sum. Balanced profile: 0.55 grid, 0.25 resilience, 0.20 spatial. Two other profiles (grid-first, resilience-first) test whether the ranking survives different priorities.</dd>
+</dl>
+<div class="callout">GENCO's job in all of this is the volume. It does not rank anything on its own. It supplies 2,184 consistent power-flow answers; the scoring, the exclusions and the weights are explicit, configurable rules that a planner can read and argue with.</div>
+</section>
+
+<section>
+<h2>6. The five maps and what each one answers</h2>
+<div class="tablewrap"><table>
+<tr><th>Map</th><th>Question</th><th>Built from</th><th>How to read it</th></tr>
+<tr><td><b>1 Spatial opportunity</b></td><td>Where is a project geographically plausible, before any grid analysis?</td><td>Real layers only</td><td>Grey cells are excluded (protected land, water, towns). Darker cells have better land, slope and sun.</td></tr>
+<tr><td><b>2 Grid stress</b></td><td>What does one plant do to the grid under one condition?</td><td>One GENCO scenario minus its baseline</td><td>Line colour = change in loading, width = absolute loading; bus colour = voltage change. Pick candidate, capacity, condition and outage.</td></tr>
+<tr><td><b>3 Grid robustness</b></td><td>Which sites stay comfortable across all capacities and conditions?</td><td>12 GENCO cases per site</td><td>Dark green robust, yellow condition-sensitive, orange constrained, red frequent issues.</td></tr>
+<tr><td><b>4 Wildfire × consequence</b></td><td>Which exposed lines matter most electrically?</td><td>Real corridor exposure × GENCO redistribution under outages</td><td>3 × 3 colour grid; dark red = high exposure and high consequence. Thick lines are the five screened outages.</td></tr>
+<tr><td><b>5 Final suitability</b></td><td>Which sites deserve a real interconnection study?</td><td>Everything above, weighted</td><td>Slide the weights; the ranking and a stability chart update live. Each site's popup lists plain-language reasons.</td></tr>
+</table></div>
+</section>
+
+<section class="col">
+<h2>7. What came out</h2>
+<p>About a quarter of the land is excluded, almost all of it Natura 2000 sites (Cabrela, Monfurado, Castro Verde, the Évora and Guadiana bird areas) and the Alqueva reservoir. Slope hardly ever limits anything in Alentejo, and PVGIS yield varies by only about 4 % across the box, so on the land side it is cover type and protection that separate sites. On the grid side the spread is much wider: grid scores run from 0.35 to 0.88 for sites with very similar land quality.</p>
+<div class="tablewrap"><table>
+<tr><th>Rank</th><th>Site</th><th>Bus</th><th class="num">Spatial</th><th class="num">Grid</th><th class="num">Resilience</th><th class="num">Final</th><th>Rank across profiles</th></tr>
+<tr><td>1</td><td>A-28</td><td>116</td><td class="num">0.81</td><td class="num">0.88</td><td class="num">0.85</td><td class="num">0.86</td><td><span class="pill ok">1 to 1</span></td></tr>
+<tr><td>2</td><td>A-13</td><td>77</td><td class="num">0.87</td><td class="num">0.80</td><td class="num">0.83</td><td class="num">0.82</td><td><span class="pill ok">2 to 3</span></td></tr>
+<tr><td>3</td><td>A-10</td><td>49</td><td class="num">0.75</td><td class="num">0.81</td><td class="num">0.86</td><td class="num">0.81</td><td><span class="pill ok">2 to 3</span></td></tr>
+<tr><td>4</td><td>A-20</td><td>92</td><td class="num">0.79</td><td class="num">0.75</td><td class="num">0.74</td><td class="num">0.75</td><td><span class="pill ok">4 to 5</span></td></tr>
+<tr><td>5</td><td>A-14</td><td>78</td><td class="num">0.76</td><td class="num">0.73</td><td class="num">0.78</td><td class="num">0.75</td><td><span class="pill ok">4 to 5</span></td></tr>
+<tr><td>9</td><td>A-19</td><td>90</td><td class="num">0.96</td><td class="num">0.57</td><td class="num">0.68</td><td class="num">0.68</td><td><span class="pill mid">9 to 12</span></td></tr>
+<tr><td>30</td><td>A-05</td><td>24</td><td class="num">0.77</td><td class="num">0.35</td><td class="num">0.47</td><td class="num">0.46</td><td><span class="pill mid">30 to 30</span></td></tr>
+</table></div>
+<figure><img src="figures/same_land_different_grid.png" alt="Same land, different grid"><figcaption>A-19 has the best land in the set and A-28 the best grid response; a 100 MW plant at each tells the story.</figcaption></figure>
+<p>The point the study is built to make shows up in A-19: the best land in the whole set (0.96), yet ninth, because its bus is a weak point in the benchmark grid. The top three keep their places under all three weight profiles, so that conclusion does not depend on the weights.</p>
+<p>The wildfire map is driven mostly by fuel cover (montado oak and shrub) rather than past burns, because the 10-year MODIS record in this box is sparse. Each of the five screened outages does what you would expect physically: it loads its parallel or neighbouring circuit hardest, by +0.1 to +1.0 of rating depending on the condition.</p>
+</section>
+
+<section class="col">
+<h2>8. How we checked it</h2>
+<p>pandapower, a conventional AC power-flow solver, solved 73 of the scenarios exactly from the identical modified inputs: all 24 baselines, the top ten sites, every outage for the top three, evenly spaced hold-outs, the cases with the largest predicted changes, and the two lowest-ranked sites. For each case we report absolute agreement and agreement on the <em>change</em> separately.</p>
+<div class="grid2">
+  <div class="card"><h3>49 of 49</h3><p>comparable cases meet the strict change criteria (voltage change error ≤ 0.002 pu, branch power change error ≤ 10 MW mean and ≤ 120 MW worst line). Median voltage-change error 0.0001 pu; median branch-power-change error 0.6 MW.</p></div>
+  <div class="card"><h3>35 of 73 on absolute values too</h3><p>Median absolute agreement is 0.0013 pu on voltage and 1.8 MW on branch power. The other 38 cases fail only the strictest gate, a 30 MW worst-single-branch limit; outage cases and 200 MW cases are where that happens.</p></div>
+  <div class="card"><h3>Nothing hidden</h3><p>The absolute offset of the checkpoint stays on the validation tab. Scenarios the AC solver cannot converge would appear as such rather than being removed.</p></div>
+  <div class="card"><h3>Spatial checks</h3><p>One coordinate system throughout, every line joins to exactly one PFDelta branch and two real buses, every site is within its 10 km connection radius, every layer carries provenance.</p></div>
+</div>
+<div class="callout warn"><b>Two bugs worth mentioning, neither in the model.</b> IEEE-118 has seven pairs of parallel lines between the same two buses; mapping them by endpoints alone assigned them arbitrarily and could swap them between runs. And pandapower stores branches in its own internal order, which an earlier version read back as if it were the dataset order, scattering AC flows across the wrong lines. That second bug had been misread as a 100 MW absolute bias of the checkpoint. Both are fixed and covered by tests that re-solve the released snapshot and demand its own flows back, branch by branch. The AC comparison exists to catch exactly this.</div>
+</section>
+
+<section class="col">
+<h2>8b. What we learned about GENCO</h2>
+<div class="grid2">
+  <div class="card"><h3>Changes, almost one for one</h3><p>Slope 0.95, R² 0.98 between GENCO and AC loading changes over 9,086 branch-scenario pairs; the direction of change agrees 99 % of the time when AC moves a line by more than 0.05 of its rating.</p></div>
+  <div class="card"><h3>Error is local</h3><p>Mean loading-change error is 0.007 on lines touching the injection bus or the removed line and 0.002 five or more hops away. AC confirmation can concentrate on that neighbourhood.</p></div>
+  <div class="card"><h3>A free trust flag</h3><p>GENCO reports a power-balance residual for every scenario. It rises with capacity and under outages and correlates with the error against AC (Spearman 0.59), so it can decide which cases go to the solver.</p></div>
+  <div class="card"><h3>Speed changes the workflow</h3><p>44 ms per scenario means the full matrix re-runs in minutes after any change to a layer, a weight or a site list, which makes sensitivity analysis routine instead of a one-off.</p></div>
+  <div class="card"><h3>The operating envelope is visible from inside</h3><p>Sweeping one site's load level from 0.5 to 1.5 of the training snapshot, GENCO's error against AC grows from 0.2 MW at the centre to 27 to 39 MW at the edges, and its own power-balance residual grows from 0.07 to 9 to 17 MW over the same range. Beyond 1.35 the AC solver no longer converges; GENCO still answers, with a residual of 12 to 23 MW that says "do not trust this".</p></div>
+  <div class="card"><h3>Three seeds, one shortlist</h3><p>Running all 2,184 scenarios through the three released checkpoints, the worst-affected line is the same in 91 % of scenarios and the median spread of a scenario's maximum loading change is 0.035. A-28, A-13 and A-20 stay in the grid-score top five whichever seed is used.</p></div>
+  <div class="card"><h3>An outage ranking for every line</h3><p>An outage-only GENCO baseline for each of the 177 connectivity-preserving branches under each condition (744 scenarios, about a minute) ranks the whole benchmark by consequence; the nine branches whose loss splits the network are listed rather than screened.</p></div>
+</div>
+<figure><img src="figures/genco_envelope.png" alt="Operating envelope, seed ensemble and outage ranking"><figcaption>Top left: error and residual along the load sweep (grey band: AC does not converge). Top right: spread across seeds. Bottom: rank stability across seeds and the all-branch outage ranking.</figcaption></figure>
+</section>
+
+<section class="col">
+<h2>9. Limits to keep in mind</h2>
+<ul>
+  <li>The grid is a benchmark laid over real geography. Line corridors, and therefore exposure and consequence, are illustrative. The <em>method</em> transfers to a real network model; the numbers do not.</li>
+  <li>The plant is a fixed active-power injection: no reactive support, no battery dispatch, no generator redispatch. Operating conditions scale all loads uniformly.</li>
+  <li>GENCO's error grows with injected capacity and near a removed line. The screen flags those cases for AC confirmation through GENCO's own power-balance residual, which correlates with its error (Spearman 0.59).</li>
+  <li>Exposure is a 10-year burned-area record plus fuel cover at 500 m and 10 m resolution. It is not a fire-weather or ignition model.</li>
+  <li>Weights are stated preferences. The sensitivity analysis shows which conclusions survive them and which do not.</li>
+</ul>
+</section>
+
+<section class="col">
+<h2>10. Glossary</h2>
+<dl>
+  <dt>Bus</dt><dd>A node in the network, roughly a substation. IEEE-118 has 118 of them.</dd>
+  <dt>Branch</dt><dd>A line or transformer between two buses. 186 in IEEE-118, 173 lines and 13 transformers.</dd>
+  <dt>Loading ratio</dt><dd>Apparent power on a branch divided by its rating. Above 1.0 means overloaded.</dd>
+  <dt>pu (per unit)</dt><dd>Voltage as a fraction of nominal. 1.00 is nominal; 0.95 to 1.05 is the usual comfort band.</dd>
+  <dt>N-0 / N-1</dt><dd>Intact network / network with one element out of service.</dd>
+  <dt>Delta</dt><dd>A scenario value minus the matching baseline value. The quantity all screening here uses.</dd>
+  <dt>PFDelta</dt><dd>The public dataset of solved power-flow cases GENCO was trained on; Task 1.3 is the IEEE-118 split with topology changes.</dd>
+  <dt>Natura 2000</dt><dd>The EU network of protected sites under the Habitats and Birds Directives.</dd>
+</dl>
+</section>
+
+<section>
+<h2>Figures</h2>
+<p class="col">Generated by the pipeline from the outputs; the same files are used in the written report.</p>
+<div class="grid2">
+  <figure><img src="figures/submission_overview.png" alt="The four decision maps side by side" loading="lazy"><figcaption>The four decision maps: land, grid, fire, shortlist.</figcaption></figure>
+  <figure><img src="figures/map1_spatial_opportunity.png" alt="Map 1 spatial opportunity" loading="lazy"><figcaption>Map 1. Spatial opportunity from real layers; grey cells are excluded.</figcaption></figure>
+  <figure><img src="figures/map3_grid_robustness.png" alt="Map 3 grid robustness" loading="lazy"><figcaption>Map 3. GENCO grid robustness over 12 intact-network cases per site.</figcaption></figure>
+  <figure><img src="figures/map4_wildfire_consequence.png" alt="Map 4 wildfire exposure and consequence" loading="lazy"><figcaption>Map 4. Corridor wildfire exposure against electrical consequence.</figcaption></figure>
+  <figure><img src="figures/map5_final_suitability.png" alt="Map 5 final suitability" loading="lazy"><figcaption>Map 5. Grid-aware suitability with rank, balanced profile.</figcaption></figure>
+  <figure><img src="figures/rank_stability.png" alt="Rank stability across weight profiles" loading="lazy"><figcaption>Rank of every site under the three weight profiles.</figcaption></figure>
+  <figure><img src="figures/validation_summary.png" alt="Validation summary" loading="lazy"><figcaption>GENCO against pandapower on 73 scenarios.</figcaption></figure>
+  <figure><img src="figures/genco_behaviour.png" alt="GENCO behaviour diagnostics" loading="lazy"><figcaption>How GENCO behaves: error locality, pooled change agreement, residual as trust flag.</figcaption></figure>
+  <figure><img src="figures/genco_envelope.png" alt="GENCO envelope" loading="lazy"><figcaption>Operating envelope, seed ensemble and all-branch outage ranking.</figcaption></figure>
+  <figure><img src="figures/terrain_3d_northeast.png" alt="3D view from the north-east" loading="lazy"><figcaption>The same scene from the north-east.</figcaption></figure>
+  <figure><img src="figures/same_land_different_grid.png" alt="Same land different grid" loading="lazy"><figcaption>Best land versus best grid response, 100 MW at each.</figcaption></figure>
+  <figure><img src="figures/capacity_sweep_200mw.png" alt="Capacity sweep final frame" loading="lazy"><figcaption>Final frame of the capacity sweep at 200 MW.</figcaption></figure>
+</div>
+</section>
+
+<section class="col">
+<h2>11. Reproduce it</h2>
+<pre class="cmd">cd C:\genco_project\geogridlens
+.\scripts\run_case_study_pipeline.ps1          # fetch → layers → manifest → GENCO → score → AC → export → report
+.\.venv\Scripts\streamlit.exe run app\case_study_dashboard.py
+.\.venv\Scripts\python.exe -m pytest tests</pre>
+<p>The full write-up with figures is <code>CASE_STUDY_REPORT.md</code>; every number in it is regenerated from the outputs.</p>
+</section>
+
+<footer>GeoGridLens by Khuzaima Aziz (Co-Founder, Spatial Data Scientist, Polisense AI), Polisense AI. Contact khuzaimaaziz89@gmail.com. GeoGridLens is a methodological prototype. Geographic layers are real open data (Copernicus, ESA, EEA, NASA, JRC, OpenStreetMap contributors). The electrical network is the IEEE-118 benchmark and all power-flow results are illustrative; nothing here describes Portugal's transmission system or supports a real interconnection decision.</footer>
+</main>
+</body>
+</html>

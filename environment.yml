@@ -1,0 +1,10 @@
+name: geogridlens
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - -r requirements-pipeline.txt
+# Graphkit is intentionally installed editable from ../_upstream/gridfm-graphkit
+# by scripts/bootstrap.ps1, after its PyTorch dependency is resolved.

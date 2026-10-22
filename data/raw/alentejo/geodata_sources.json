@@ -1,0 +1,115 @@
+{
+  "sources": [
+    {
+      "layer": "dem",
+      "title": "Copernicus DEM GLO-30 (ESA / Airbus, via Microsoft Planetary Computer)",
+      "url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/cop-dem-glo-30",
+      "native_resolution": "30 m",
+      "derived": "100 m DEM and slope (degrees)",
+      "license": "Copernicus DEM licence (free, attribution required)",
+      "items": [
+        "Copernicus_DSM_COG_10_N38_00_W009_00_DEM",
+        "Copernicus_DSM_COG_10_N38_00_W008_00_DEM",
+        "Copernicus_DSM_COG_10_N37_00_W009_00_DEM",
+        "Copernicus_DSM_COG_10_N37_00_W008_00_DEM"
+      ],
+      "accessed_utc": "2026-10-22T20:17:29+00:00"
+    },
+    {
+      "layer": "land_cover",
+      "title": "ESA WorldCover 10 m 2021 v200",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_{tile}_Map.tif",
+      "native_resolution": "10 m",
+      "derived": "100 m majority class",
+      "license": "CC BY 4.0",
+      "tiles": [
+        "N36W009"
+      ],
+      "classes": {
+        "10": "tree_cover",
+        "20": "shrubland",
+        "30": "grassland",
+        "40": "cropland",
+        "50": "built_up",
+        "60": "bare_sparse",
+        "70": "snow_ice",
+        "80": "water",
+        "90": "herbaceous_wetland",
+        "95": "mangroves",
+        "100": "moss_lichen"
+      },
+      "accessed_utc": "2026-10-22T20:17:30+00:00"
+    },
+    {
+      "layer": "protected_areas",
+      "title": "Natura 2000 (EEA, 2024) and Nationally designated areas (EEA CDDA)",
+      "url": [
+        "https://bio.discomap.eea.europa.eu/arcgis/rest/services/ProtectedSites/Natura2000Sites/MapServer/0|1/query",
+        "https://bio.discomap.eea.europa.eu/arcgis/rest/services/ProtectedSites/CDDA_Dyna_WM/MapServer/4/query"
+      ],
+      "native_resolution": "vector",
+      "license": "EEA standard re-use policy (free, attribution)",
+      "feature_count": 18,
+      "accessed_utc": "2026-10-22T20:17:33+00:00"
+    },
+    {
+      "layer": "burned_area",
+      "title": "MODIS/Terra+Aqua Burned Area Monthly L3 500 m (MCD64A1 v061, NASA LP DAAC via Planetary Computer)",
+      "url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-64A1-061",
+      "native_resolution": "500 m",
+      "derived": "count of monthly burn detections 2015-2024 on the 100 m grid",
+      "license": "NASA open data",
+      "months_with_fire_in_area": [
+        "MCD64A1.A2015001.h17v05.061.2021320101132",
+        "MCD64A1.A2015060.h17v05.061.2021323220219",
+        "MCD64A1.A2015182.h17v05.061.2021331175457",
+        "MCD64A1.A2016245.h17v05.061.2021360001234",
+        "MCD64A1.A2016275.h17v05.061.2021362120846",
+        "MCD64A1.A2017121.h17v05.061.2021312123644",
+        "MCD64A1.A2017152.h17v05.061.2021312125712",
+        "MCD64A1.A2017182.h17v05.061.2021312132008",
+        "MCD64A1.A2017213.h17v05.061.2021312134033",
+        "MCD64A1.A2018244.h17v05.061.2021361220506",
+        "MCD64A1.A2018274.h17v05.061.2021363193728",
+        "MCD64A1.A2019091.h17v05.061.2021309104145",
+        "MCD64A1.A2019121.h17v05.061.2021309104307",
+        "MCD64A1.A2019244.h17v05.061.2021309105255",
+        "MCD64A1.A2019274.h17v05.061.2021309105433",
+        "MCD64A1.A2019305.h17v05.061.2021309105832",
+        "MCD64A1.A2020122.h17v05.061.2021309111542",
+        "MCD64A1.A2020245.h17v05.061.2021309112049",
+        "MCD64A1.A2021152.h17v05.061.2021309114141",
+        "MCD64A1.A2022244.h17v05.061.2022316053022",
+        "MCD64A1.A2024092.h17v05.061.2024162191227",
+        "MCD64A1.A2024245.h17v05.061.2024317170055"
+      ],
+      "item_count": 118,
+      "accessed_utc": "2026-10-22T20:17:51+00:00"
+    },
+    {
+      "layer": "solar_resource",
+      "title": "PVGIS 5.3 PVcalc (JRC), SARAH3 radiation, optimal fixed tilt, 14 % system loss",
+      "url": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc",
+      "native_resolution": "6x6 point grid, interpolated to cells",
+      "license": "JRC PVGIS free use",
+      "point_count": 36,
+      "accessed_utc": "2026-10-22T20:18:42+00:00"
+    },
+    {
+      "layer": "settlements",
+      "title": "OpenStreetMap places (city/town/village)",
+      "url": "https://overpass-api.de/api/interpreter",
+      "license": "ODbL",
+      "feature_count": 90,
+      "accessed_utc": "2026-10-22T20:20:12+00:00"
+    },
+    {
+      "layer": "osm_substations_context",
+      "title": "OpenStreetMap power=substation (display context only; NOT the modelled network)",
+      "url": "https://overpass-api.de/api/interpreter",
+      "license": "ODbL",
+      "feature_count": 182,
+      "accessed_utc": "2026-10-22T20:20:12+00:00"
+    }
+  ]
+}
